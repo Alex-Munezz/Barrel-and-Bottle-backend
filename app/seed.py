@@ -1,36 +1,154 @@
-from faker import Faker
+# from faker import Faker
 from models import Drink, Review, Customer, Sale, db
 from main import app
-import random
 
-fake = Faker()
 
+reviews_data = [
+    {
+      "id": 1,
+      "drink_id": 123,
+      "customer_id": 456,
+      "review": "Great drink!"
+    },
+    {
+      "id": 2,
+      "drink_id": 789,
+      "customer_id": 101,
+      "review": "Amazing flavor!"
+    },
+    {
+      "id": 3,
+      "drink_id": 456,
+      "customer_id": 789,
+      "review": "Refreshing and delicious."
+    },
+    {
+      "id": 4,
+      "drink_id": 987,
+      "customer_id": 654,
+      "review": "Not what I expected. Disappointed."
+    },
+    {
+      "id": 5,
+      "drink_id": 321,
+      "customer_id": 987,
+      "review": "Perfect balance of flavors."
+    },
+    {
+      "id": 6,
+      "drink_id": 654,
+      "customer_id": 321,
+      "review": "Lacks depth. Could be better."
+    },
+    {
+      "id": 7,
+      "drink_id": 789,
+      "customer_id": 456,
+      "review": "Absolutely loved it!"
+    },
+    {
+      "id": 8,
+      "drink_id": 101,
+      "customer_id": 123,
+      "review": "Smooth and satisfying."
+    },
+    {
+      "id": 9,
+      "drink_id": 654,
+      "customer_id": 987,
+      "review": "Too sweet for my taste."
+    },
+    {
+      "id": 10,
+      "drink_id": 456,
+      "customer_id": 101,
+      "review": "Will definitely order again."
+    }
+  ]
+
+
+
+from random import randint
 with app.app_context():
-    drinks = []
-    for i in range(10):
-        result = Drink(
-            name=fake.name(),
-            percentage=fake.text(),
-            breweries=fake.company(),  # Use 'company()' instead of 'breweries()'
-            price=fake.currency()
-        )
-        drinks.append(result)
 
-    db.session.add_all(drinks)
-    db.session.commit()
-
-    reviews = []
-    for i in range(10):
-        result = Review(
-            id=fake.random_int(),
-            drink_id=fake.drink_id(),
-            customer_id=fake.int(),
-            review=fake.review()
-        )
-        reviews.append(result)
-
+    with app.app_context():
+      reviews = []
+    for review_data in reviews_data:
+        review = Review(**review_data)
+        reviews.append(review)
     db.session.add_all(reviews)
     db.session.commit()
+
+
+
+
+# import random
+
+# fake = Faker()
+
+# with app.app_context():
+#     from faker import Faker
+# import random
+
+# fake = Faker()
+
+# # Create and seed database objects
+# drinks = [
+#     Drink(
+#         name=fake.name(),
+#         percentage=random.randint(1, 10),
+#         breweries=fake.company(),
+#         price=(fake.currency_code(), fake.currency_name())
+#     )
+#     for _ in range(10)
+# ]
+
+# reviews = [
+#     Review(
+#         comment=fake.sentence(),
+#         rating=random.randint(1, 5),
+#         drink_id=random.choice(drinks).id,
+#         customer_id=random.randint(1, 100)
+#     )
+#     for _ in range(20)
+# ]
+
+# # Add objects to the session
+# db.session.add_all(drinks)
+# db.session.add_all(reviews)
+
+# # Commit the session to persist the objects in the database
+# db.session.commit()
+
+
+
+    
+    # drinks = []
+    # for i in range(10):
+    #     result = Drink(
+    #         # id=random.randint(1,9),
+    #         name=fake.name(),
+    #         percentage=random.randint(1,9),
+    #         breweries=fake.company(),  # Use 'company()' instead of 'breweries()'
+    #         price=random.randint(1,9)
+    #     )
+    #     drinks.append(result)
+
+    # db.session.add_all(drinks)
+    # db.session.commit()
+
+    # reviews = []
+    # for i in range(10):
+    #     result = Review(
+    #         # id=random.randint(1,5),
+    #         # drink_id=random.randint(1,4),
+    #         # customer_id=random.randint(1,3),
+    #         review=fake.word()
+    #     )
+    #     reviews.append(result)
+
+    # db.session.add_all(reviews)
+    # db.session.commit()
 
 
 
