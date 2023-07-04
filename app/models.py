@@ -6,7 +6,6 @@ class Drink(db.Model):
     __tablename__ = 'drinks'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True)
-    type = db.Column(db.String)
     percentage = db.Column(db.Integer)
     breweries = db.Column(db.String)
     price = db.Column(db.Integer)
@@ -14,9 +13,9 @@ class Drink(db.Model):
     reviews = db.relationship('Review', backref='drink')
     sales = db.relationship('Sale', backref='drink')
 
-    def __init__(self, name, type, percentage, breweries, price):
+    def __init__(self, name, percentage, breweries, price):
         self.name = name
-        self.type = type
+        
         self.percentage = percentage
         self.breweries = breweries
         self.price = price
