@@ -67,6 +67,32 @@ def create_drinks():
     response = make_response(jsonify({"message": "successfully added"}), 201)
     return response
 
+@app.route('/drinks/<int:id>', methods=['PATCH'])
+def update_drink(id):
+    drink = Drink.query.filter_by(id=id).first()
+    
+    if not drink:
+        return jsonify({'error': 'Drink not found'}), 404
+    
+    data = request.get_json()
+    
+    # Update the drink attributes based on the provided data
+    if 'name' in data:
+        drink.name = data['name']
+    if 'cover' in data:
+        drink.cover = data['cover']
+    if 'percentage' in data:
+        drink.percentage = data['percentage']
+    if 'breweries' in data:
+        drink.breweries = data['breweries']
+    if 'price' in data:
+        drink.price = data['price']
+    
+    db.session.commit()
+    
+    return jsonify({'message': 'Drink updated successfully'})
+
+
 # DELETE drinks/:id
 @app.route('/drinks/<int:id>', methods=['DELETE'])
 def delete_drink(id):
