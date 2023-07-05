@@ -6,12 +6,12 @@ from sqlalchemy.orm import relationship
 db = SQLAlchemy()
 
 def create_all_tables():
-    from main import app
+    from app import app
     db.init_app(app)
     with app.app_context():
         db.create_all()
 
-from main import db
+from app import db
 
 class Drink(db.Model):
     __tablename__ = 'drinks'
