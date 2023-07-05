@@ -83,7 +83,7 @@ drinks_data = [
         "id": 4,
         "cover":"https://thewinebox.biz/wp-content/uploads/2022/01/captain-morgan-spiced-rum.png",
         "name": "Captain Morgan",
-        "percentage": "3.5%",
+        "percentage": "39%",
         "breweries":"Diageo",
         "price": "1100" 
     },
