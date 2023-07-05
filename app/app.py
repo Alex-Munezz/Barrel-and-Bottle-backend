@@ -67,6 +67,7 @@ def create_drinks():
     response = make_response(jsonify({"message": "successfully added"}), 201)
     return response
 
+# UPDATE/PATCH drinks/id
 @app.route('/drinks/<int:id>', methods=['PATCH'])
 def update_drink(id):
     drink = Drink.query.filter_by(id=id).first()
