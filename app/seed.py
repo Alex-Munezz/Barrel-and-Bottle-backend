@@ -1,87 +1,70 @@
-# from faker import Faker
-from models import Drink, Review, Customer, Sale, db
-from main import app
+from main import db, app
+from models import Review
 
 
 reviews_data = [
     {
-      "id": 1,
-      "drink_id": 123,
-      "customer_id": 456,
-      "review": "Great drink!"
+        "drink_id": 123,
+        "customer_id": 456,
+        "review": "Great drink!"
     },
     {
-      "id": 2,
-      "drink_id": 789,
-      "customer_id": 101,
-      "review": "Amazing flavor!"
+        "drink_id": 789,
+        "customer_id": 101,
+        "review": "Amazing flavor!"
     },
     {
-      "id": 3,
-      "drink_id": 456,
-      "customer_id": 789,
-      "review": "Refreshing and delicious."
+        "drink_id": 456,
+        "customer_id": 789,
+        "review": "Refreshing and delicious."
     },
     {
-      "id": 4,
-      "drink_id": 987,
-      "customer_id": 654,
-      "review": "Not what I expected. Disappointed."
+        "drink_id": 987,
+        "customer_id": 654,
+        "review": "Not what I expected. Disappointed."
     },
     {
-      "id": 5,
-      "drink_id": 321,
-      "customer_id": 987,
-      "review": "Perfect balance of flavors."
+        "drink_id": 321,
+        "customer_id": 987,
+        "review": "Perfect balance of flavors."
     },
     {
-      "id": 6,
-      "drink_id": 654,
-      "customer_id": 321,
-      "review": "Lacks depth. Could be better."
+        "drink_id": 654,
+        "customer_id": 321,
+        "review": "Lacks depth. Could be better."
     },
     {
-      "id": 7,
-      "drink_id": 789,
-      "customer_id": 456,
-      "review": "Absolutely loved it!"
+        "drink_id": 789,
+        "customer_id": 456,
+        "review": "Absolutely loved it!"
     },
     {
-      "id": 8,
-      "drink_id": 101,
-      "customer_id": 123,
-      "review": "Smooth and satisfying."
+        "drink_id": 101,
+        "customer_id": 123,
+        "review": "Smooth and satisfying."
     },
     {
-      "id": 9,
-      "drink_id": 654,
-      "customer_id": 987,
-      "review": "Too sweet for my taste."
+        "drink_id": 654,
+        "customer_id": 987,
+        "review": "Too sweet for my taste."
     },
     {
-      "id": 10,
-      "drink_id": 456,
-      "customer_id": 101,
-      "review": "Will definitely order again."
+        "drink_id": 456,
+        "customer_id": 101,
+        "review": "Will definitely order again."
     }
-  ]
+]
 
 
-
-from random import randint
 with app.app_context():
+    db.create_all()
 
-    with app.app_context():
-      reviews = []
+    reviews = []
     for review_data in reviews_data:
         review = Review(**review_data)
         reviews.append(review)
     db.session.add_all(reviews)
     db.session.commit()
-
-
-
-
 # import random
 
 # fake = Faker()

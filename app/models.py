@@ -1,6 +1,17 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship
+
 
 db = SQLAlchemy()
+
+def create_all_tables():
+    from main import app
+    db.init_app(app)
+    with app.app_context():
+        db.create_all()
+
+from main import db
 
 class Drink(db.Model):
     __tablename__ = 'drinks'
@@ -10,7 +21,7 @@ class Drink(db.Model):
     breweries = db.Column(db.String)
     price = db.Column(db.Integer)
 
-    reviews = db.relationship('Review', backref='drink', cascade='all, delete-orphan')
+    reviews = db.relationship('Review', backref='drink', lazy='dynamic')
     sales = db.relationship('Sale', backref='drink', cascade='all, delete-orphan')
 
     def __init__(self, name, percentage, breweries, price):
@@ -22,15 +33,19 @@ class Drink(db.Model):
 
 class Review(db.Model):
     __tablename__ = 'reviews'
-    id = db.Column(db.Integer, primary_key=True)
-    drink_id = db.Column(db.Integer, db.ForeignKey('drinks.id'))
-    customer_id = db.Column(db.Integer, db.ForeignKey('customers.id'))
-    review = db.Column(db.String)
 
+    id = db.Column(db.Integer, primary_key=True)
+    drink_id = db.Column(db.Integer, db.ForeignKey('drinks.id'), nullable=False)
+    drink_id = db.Column(db.Integer, nullable=False)
+    customer_id = db.Column(db.Integer, ForeignKey('customers.id'))
+    review = db.Column(db.String(255), nullable=False)
+
+    drink_id = db.Column(db.Integer, ForeignKey('drinks.id'), nullable=False)
     def __init__(self, drink_id, customer_id, review):
         self.drink_id = drink_id
         self.customer_id = customer_id
         self.review = review
+    
 
 
 class Customer(db.Model):
@@ -40,7 +55,7 @@ class Customer(db.Model):
     email_address = db.Column(db.String)
     password = db.Column(db.String)
 
-    reviews = db.relationship('Review', backref='customer', cascade='all, delete-orphan')
+    reviews = relationship('Review', backref='customer')
     sales = db.relationship('Sale', backref='customer', cascade='all, delete-orphan')
 
     def __init__(self, username, email_address, password):
