@@ -1,7 +1,7 @@
 from flask import Flask, request, make_response, jsonify
 
 from flask_migrate import Migrate
-from models import db, Review,Drink
+from models import db, Review,Drink, Customer
 app = Flask(__name__)
 # CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -104,6 +104,25 @@ def delete_drink(id):
         return '', 204
     else:
         return jsonify({'error': 'Drink not found'}), 404
+    
+# GET customers
+@app.route('/customers', methods=['GET'])
+def get_customers():
+    customers = Customer.query.all()
+    customers_list = []
+    for customer in customers:
+        customers_data = {
+            'id': customer.id,
+            'username':customer.username,
+            'email_address': customer.email_address,
+            'password': customer.password
+           
+            
+        }
+        customers_list.append(customers_data)
+    return jsonify(customers_list)
+
+
 
 # GET reviews
 @app.route('/reviews', methods=['GET'])
