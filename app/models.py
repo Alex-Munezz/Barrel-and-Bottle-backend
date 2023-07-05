@@ -116,15 +116,16 @@ class Drink(db.Model):
     breweries = db.Column(db.String)
     price = db.Column(db.Integer)
 
-    reviews = db.relationship('Review', backref='drink')
+    reviews = db.relationship('Review',cascade='all, delete', backref='drink')
     sales = db.relationship('Sale', backref='drink')
 
-    def __init__(self, name, type, percentage, breweries, price):
-        self.name = name
-        self.type = type
-        self.percentage = percentage
-        self.breweries = breweries
-        self.price = price
+    # def __init__(self, name,cover,type, percentage, breweries, price):
+    #     self.name = name
+    #     self.type = type
+    #     self.cover = cover
+    #     self.percentage = percentage
+    #     self.breweries = breweries
+    #     self.price = price
 
 
 class Review(db.Model):

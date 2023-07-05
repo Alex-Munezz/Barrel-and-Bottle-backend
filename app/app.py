@@ -47,10 +47,30 @@ def get_drink(drink_id):
     }
     return jsonify(drink_data)
 
-# DELETE drinks
-@app.route('/drinks/<int:drink_id>', methods=['DELETE'])
-def delete_drink(drink_id):
-    drink = Drink.query.get(drink_id)
+# POST drinks
+
+@app.route('/drinks', methods=['POST'])
+def create_drinks():
+    data = request.get_json()
+    
+    rest_drink = Drink(
+        name=data['name'],
+        cover=data['cover'],
+        percentage=data['percentage'],
+        breweries=data['breweries'],
+        price=data['price']
+    )
+
+    db.session.add(rest_drink)
+    db.session.commit()
+
+    response = make_response(jsonify({"message": "successfully added"}), 201)
+    return response
+
+# DELETE drinks/:id
+@app.route('/drinks/<int:id>', methods=['DELETE'])
+def delete_drink(id):
+    drink = Drink.query.filter_by(id=id).first()
     if drink:
         db.session.delete(drink)
         db.session.commit()
