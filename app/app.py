@@ -12,6 +12,7 @@ app.json.compact = False
 migrate = Migrate(app, db)
 db.init_app(app)
 
+# GET drinks
 @app.route('/drinks', methods=['GET'])
 def get_drinks():
     drinks = Drink.query.all()
@@ -29,6 +30,35 @@ def get_drinks():
         drinks_list.append(drinks_data)
     return jsonify(drinks_list)
 
+@app.route("/drinks/<int:drink_id>", methods=["GET"])
+def get_drink(drink_id):
+    drink = Drink.query.filter_by(id=drink_id).first()
+
+    if not drink:
+        return jsonify({}), 404
+
+    drink_data = {
+            'id': drink.id,
+            'cover':drink.cover,
+            'name': drink.name,
+            'percentage': drink.percentage,
+            'breweries': drink.breweries,
+            'price':drink.price
+    }
+    return jsonify(drink_data)
+
+# DELETE drinks
+@app.route('/drinks/<int:drink_id>', methods=['DELETE'])
+def delete_drink(drink_id):
+    drink = Drink.query.get(drink_id)
+    if drink:
+        db.session.delete(drink)
+        db.session.commit()
+        return '', 204
+    else:
+        return jsonify({'error': 'Drink not found'}), 404
+
+# GET reviews
 @app.route('/reviews', methods=['GET'])
 def get_reviews():
     reviews = Review.query.all()
@@ -44,15 +74,7 @@ def get_reviews():
         reviews_list.append(reviews_data)
     return jsonify(reviews_list)
 
-@app.route('/drinks/<int:drink_id>', methods=['DELETE'])
-def delete_drink(drink_id):
-    drink = Drink.query.get(drink_id)
-    if drink:
-        db.session.delete(drink)
-        db.session.commit()
-        return '', 204
-    else:
-        return jsonify({'error': 'Drink not found'}), 404
+
 
 if __name__ == '__main__':
     app.run(port=5555)
