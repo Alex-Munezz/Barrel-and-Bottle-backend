@@ -16,6 +16,7 @@ from app import db
 class Drink(db.Model):
     __tablename__ = 'drinks'
     id = db.Column(db.Integer, primary_key=True)
+    cover = db.Column(db.String(100000), unique=True)
     name = db.Column(db.String, unique=True)
     percentage = db.Column(db.Integer)
     breweries = db.Column(db.String)
@@ -24,8 +25,9 @@ class Drink(db.Model):
     reviews = db.relationship('Review', backref='drink', lazy='dynamic')
     sales = db.relationship('Sale', backref='drink', cascade='all, delete-orphan')
 
-    def __init__(self, id, name, percentage, breweries, price):
+    def __init__(self, id, cover, name, percentage, breweries, price):
         self.id = id
+        self.cover = cover
         self.name = name
         self.percentage = percentage
         self.breweries = breweries
