@@ -24,7 +24,8 @@ class Drink(db.Model):
     reviews = db.relationship('Review', backref='drink', lazy='dynamic')
     sales = db.relationship('Sale', backref='drink', cascade='all, delete-orphan')
 
-    def __init__(self, name, percentage, breweries, price):
+    def __init__(self, id, name, percentage, breweries, price):
+        self.id = id
         self.name = name
         self.percentage = percentage
         self.breweries = breweries
@@ -36,11 +37,11 @@ class Review(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     drink_id = db.Column(db.Integer, db.ForeignKey('drinks.id'), nullable=False)
-    drink_id = db.Column(db.Integer, nullable=False)
+    # drink_id = db.Column(db.Integer, nullable=False)
     customer_id = db.Column(db.Integer, ForeignKey('customers.id'))
     review = db.Column(db.String(255), nullable=False)
 
-    drink_id = db.Column(db.Integer, ForeignKey('drinks.id'), nullable=False)
+    # drink_id = db.Column(db.Integer, ForeignKey('drinks.id'), nullable=False)
     def __init__(self, drink_id, customer_id, review):
         self.drink_id = drink_id
         self.customer_id = customer_id
