@@ -137,6 +137,24 @@ def get_customer(customer_id):
     }
     return jsonify(customer_data)
 
+# POST customers
+@app.route('/customers', methods=['POST'])
+def create_customers():
+    data = request.get_json()
+    
+    rest_customer = Customer(
+        username=data['username'],
+        email_address=data['email_address'],
+        password=data['password']
+    )
+
+    db.session.add(rest_customer)
+    db.session.commit()
+
+    response = make_response(jsonify({"message": "successfully added"}), 201)
+    return response
+
+
 
 
 # GET reviews
