@@ -177,6 +177,16 @@ def update_customer(id):
     
     return jsonify({'message': 'Customer updated successfully'})
 
+# DELETE customer
+@app.route('/customers/<int:id>', methods=['DELETE'])
+def delete_customer(id):
+    customer = Customer.query.filter_by(id=id).first()
+    if customer:
+        db.session.delete(customer)
+        db.session.commit()
+        return '', 204
+    else:
+        return jsonify({'error': 'Customer not found'}), 404
 
 
 

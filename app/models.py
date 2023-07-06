@@ -146,7 +146,7 @@ class Customer(db.Model):
     email_address = db.Column(db.String)
     password = db.Column(db.String)
 
-    reviews = db.relationship('Review', backref='customer')
+    reviews = db.relationship('Review',cascade='all, delete', backref='customer')
     sales = db.relationship('Sale', backref='customer')
 
     def __init__(self, username, email_address, password):
