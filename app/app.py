@@ -2,7 +2,7 @@ from flask import Flask, request, make_response, jsonify
 from flask_cors import CORS
 
 from flask_migrate import Migrate
-from models import db, Review,Drink, Customer
+from models import db, Review,Drink, Customer,Admin
 app = Flask(__name__)
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -188,7 +188,68 @@ def delete_customer(id):
         return '', 204
     else:
         return jsonify({'error': 'Customer not found'}), 404
+    
+# GET admin
+@app.route('/admins', methods=['GET'])
+def get_admins():
+    admins = Admin.query.all()
+    admins_list = []
+    for admin in admins:
+        admins_data = {
+            'id': admin.id,
+            'username':admin.username,
+            'password': admin.password
+        }
+        admins_list.append(admins_data)
+    return jsonify(admins_list)
 
+# POST admin
+@app.route('/admins', methods=['POST'])
+def create_admins():
+    data = request.get_json()
+    
+    rest_admin = Admin(
+        username=data['username'],
+        password=data['password']
+    )
+
+    db.session.add(rest_admin)
+    db.session.commit()
+
+    response = make_response(jsonify({"message": "successfully added"}), 201)
+    return response
+
+# PATCH/UPDATE admins
+@app.route('/admins/<int:id>', methods=['PATCH'])
+def update_admin(id):
+    admin = Admin.query.filter_by(id=id).first()
+    
+    if not admin:
+        return jsonify({'error': 'Admin not found'}), 404
+    
+    data = request.get_json()
+
+
+    if 'username' in data:
+        admin.username = data['username']
+    if 'password' in data:
+        admin.password = data['password']
+   
+    
+    db.session.commit()
+    
+    return jsonify({'message': 'Admin updated successfully'})
+
+# DELETE admin
+@app.route('/admins/<int:id>', methods=['DELETE'])
+def delete_admin(id):
+    admin = Admin.query.filter_by(id=id).first()
+    if admin:
+        db.session.delete(admin)
+        db.session.commit()
+        return '', 204
+    else:
+        return jsonify({'error': 'Admin not found'}), 404
 
 
 
