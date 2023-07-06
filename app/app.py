@@ -154,6 +154,30 @@ def create_customers():
     response = make_response(jsonify({"message": "successfully added"}), 201)
     return response
 
+# PATCH customers/id
+@app.route('/customers/<int:id>', methods=['PATCH'])
+def update_customer(id):
+    customer = Customer.query.filter_by(id=id).first()
+    
+    if not customer:
+        return jsonify({'error': 'Customer not found'}), 404
+    
+    data = request.get_json()
+    
+    # Update the customer attributes based on the provided data
+    if 'username' in data:
+        customer.username = data['username']
+    if 'email_address' in data:
+        customer.email_address = data['email_address']
+    if 'password' in data:
+        customer.password = data['password']
+   
+    
+    db.session.commit()
+    
+    return jsonify({'message': 'Customer updated successfully'})
+
+
 
 
 
