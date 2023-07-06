@@ -1,9 +1,10 @@
 from flask import Flask, request, make_response, jsonify
+from flask_cors import CORS
 
 from flask_migrate import Migrate
 from models import db, Review,Drink
 app = Flask(__name__)
-# CORS(app)
+CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
@@ -59,5 +60,5 @@ if __name__ == '__main__':
 
 
 
-# from routes import reviews_blueprint
+# # from routes import reviews_blueprint
 # app.register_blueprint(reviews_blueprint)
