@@ -2,7 +2,7 @@ from flask import Flask, request, make_response, jsonify
 from flask_cors import CORS
 
 from flask_migrate import Migrate
-from models import db, Review,Drink, Customer,Admin
+from models import db, Review,Drink, Customer,Admin, Sale
 app = Flask(__name__)
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -250,6 +250,37 @@ def delete_admin(id):
         return '', 204
     else:
         return jsonify({'error': 'Admin not found'}), 404
+
+# GET sales
+@app.route('/sales', methods=['GET'])
+def get_sales():
+    sales = Sale.query.all()
+    sales_list = []
+    for sale in sales:
+        sales_data = {
+            'id': sale.id,
+            'customer_id':sale.customer_id,
+            'drink_id': sale.drink_id
+        }
+        sales_list.append(sales_data)
+    return jsonify(sales_list)
+
+# POST sales
+@app.route('/sales', methods=['POST'])
+def create_sales():
+    data = request.get_json()
+    
+    rest_sale = Sale(
+        customer_id=data['customer_id'],
+        drink_id=data['drink_id']
+    )
+
+    db.session.add(rest_sale)
+    db.session.commit()
+
+    response = make_response(jsonify({"message": "successfully added"}), 201)
+    return response
+
 
 
 

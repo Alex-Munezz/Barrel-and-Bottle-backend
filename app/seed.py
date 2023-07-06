@@ -156,19 +156,19 @@ from models import  Review, Drink, Customer
 
 
 from faker import Faker
+import random
 import json
 
 fake = Faker()
 
-customer_data = []
-
-for _ in range(15):
-    customer = {
-        'username': fake.user_name(),
-        'email_address': fake.email(),
-        'password': fake.password(),
+sales = []
+for _ in range(10):
+    sale = {
+        'customer_id': random.randint(1, 10),
+        'drink_id': random.randint(1, 10)
     }
-    customer_data.append(customer)
+    sales.append(sale)
 
-customer_data_json = json.dumps(customer_data, indent=4)
-print(customer_data_json)
+sales_json = json.dumps(sales, indent=4)
+print(sales_json)
+
