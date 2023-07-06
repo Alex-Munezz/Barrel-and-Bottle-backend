@@ -122,6 +122,21 @@ def get_customers():
         customers_list.append(customers_data)
     return jsonify(customers_list)
 
+@app.route("/customers/<int:customer_id>", methods=["GET"])
+def get_customer(customer_id):
+    customer = Customer.query.filter_by(id=customer_id).first()
+
+    if not customer:
+        return jsonify({}), 404
+
+    customer_data = {
+            'id': customer.id,
+            'username':customer.username,
+            'email_address': customer.email_address,
+            'password': customer.password
+    }
+    return jsonify(customer_data)
+
 
 
 # GET reviews
