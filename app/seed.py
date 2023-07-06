@@ -155,20 +155,41 @@ from models import  Review, Drink, Customer
 #     db.session.commit()
 
 
+# from faker import Faker
+# import random
+# import json
+
+# fake = Faker()
+
+# sales = []
+# for _ in range(10):
+#     sale = {
+#         'customer_id': random.randint(1, 10),
+#         'drink_id': random.randint(1, 10)
+#     }
+#     sales.append(sale)
+
+# sales_json = json.dumps(sales, indent=4)
+# print(sales_json)
+
 from faker import Faker
-import random
-import json
+import bcrypt
 
 fake = Faker()
 
-sales = []
-for _ in range(10):
-    sale = {
-        'customer_id': random.randint(1, 10),
-        'drink_id': random.randint(1, 10)
-    }
-    sales.append(sale)
+# Generate 10 faker instances for registration
+with app.app_context():
+  for i in range(10):
+    username = fake.name()
+    password = fake.password()
+    email_address = fake.email()
 
-sales_json = json.dumps(sales, indent=4)
-print(sales_json)
+    # Hash the password
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
+    # Create and save the customer
+    customer = Customer(username=username, password=hashed_password, email_address=email_address)
+    db.session.add(customer)
+    db.session.commit()
+
 

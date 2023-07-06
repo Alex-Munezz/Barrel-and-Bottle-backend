@@ -105,7 +105,12 @@
 
 from flask_sqlalchemy import SQLAlchemy
 
+
 db = SQLAlchemy()
+
+
+
+
 
 class Drink(db.Model):
     __tablename__ = 'drinks'
@@ -116,16 +121,20 @@ class Drink(db.Model):
     breweries = db.Column(db.String)
     price = db.Column(db.Integer)
 
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'cover': self.cover,
+            'name': self.name,
+            'percentage': self.percentage,
+            'breweries': self.breweries,
+            'price': self.price
+        }
+
     reviews = db.relationship('Review',cascade='all, delete', backref='drink')
     sales = db.relationship('Sale', backref='drink')
 
-    # def __init__(self, name,cover,type, percentage, breweries, price):
-    #     self.name = name
-    #     self.type = type
-    #     self.cover = cover
-    #     self.percentage = percentage
-    #     self.breweries = breweries
-    #     self.price = price
 
 
 class Review(db.Model):
@@ -135,8 +144,14 @@ class Review(db.Model):
     customer_id = db.Column(db.Integer, db.ForeignKey("customers.id"))
     review = db.Column(db.String)
 
-    def __init__(self, review):
-        self.review = review
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'drink_id': self.drink_id,
+            'customer_id': self.customer_id,
+            'review': self.review
+        }
+
 
 
 class Customer(db.Model):
@@ -146,13 +161,17 @@ class Customer(db.Model):
     email_address = db.Column(db.String)
     password = db.Column(db.String)
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'email_address': self.email_address,
+            # 'password': self.password.encode('utf-8')
+        }
+
     reviews = db.relationship('Review',cascade='all, delete', backref='customer')
     sales = db.relationship('Sale', backref='customer')
 
-    def __init__(self, username, email_address, password):
-        self.username = username
-        self.email_address = email_address
-        self.password = password
 
 
 class Admin(db.Model):
@@ -161,9 +180,13 @@ class Admin(db.Model):
     username = db.Column(db.String)
     password = db.Column(db.String)
 
-    def __init__(self, username, password):
-        self.username = username
-        self.password = password
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'password': self.password
+        }
+
 
 
 class Sale(db.Model):
@@ -172,7 +195,12 @@ class Sale(db.Model):
     customer_id = db.Column(db.Integer, db.ForeignKey("customers.id"))
     drink_id = db.Column(db.Integer, db.ForeignKey("drinks.id"))
 
-    def __init__(self, customer_id, drink_id):
-        self.customer_id = customer_id
-        self.drink_id = drink_id
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'customer_id': self.customer_id,
+            'drink_id': self.drink_id
+        }
+
+
 
